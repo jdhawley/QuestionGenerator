@@ -12,13 +12,16 @@ namespace QuestionGenerator.ConsoleUI
             {
                 if(context.Questions.Count() == 0)
                 {
-                    SeedData.SeedBookOfQuestions(@"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\UnprocessedSeedData\BookOfQuestions.txt");
-                    //SeedData.SeedQuestionsForCouples(@"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\UnprocessedSeedData\QuestionsForCouples.txt");
+                    SeedData.SeedQuestions(@"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\ProcessedSeedData\BookOfQuestions.txt");
+                    SeedData.SeedQuestions(@"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\ProcessedSeedData\QuestionsForCouples.txt");
                 }
             }
 
             //TODO: Pull 3 random questions
             //TODO: Send questions to Katie and I
+
+            Console.WriteLine("Execution complete. Press enter to close.");
+            Console.ReadLine();
         }
     }
 }

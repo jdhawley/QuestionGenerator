@@ -1,19 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace QuestionGenerator.Data
 {
     public class SeedData
     {
-        public static void SeedQuestionsForCouples(string filepath)
+        public static void SeedQuestions(string filepath)
         {
-            throw new NotImplementedException();
-        }
+            using (LocalDbContext context = new LocalDbContext())
+            {
+                foreach (string question in System.IO.File.ReadAllLines(filepath))
+                {
+                    context.Questions.Add(new Domain.Question()
+                    {
+                        QuestionText = question,
+                    });
+                }
 
-        public static void SeedBookOfQuestions(string filepath)
-        {
-            throw new NotImplementedException();
+                context.SaveChanges();
+            }
         }
     }
 }
