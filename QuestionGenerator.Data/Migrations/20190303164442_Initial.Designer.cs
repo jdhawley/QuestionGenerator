@@ -9,7 +9,7 @@ using QuestionGenerator.Data;
 
 namespace QuestionGenerator.Data.Migrations
 {
-    [DbContext(typeof(LocalDbContext))]
+    [DbContext(typeof(QuestionDbContext))]
     [Migration("20190303164442_Initial")]
     partial class Initial
     {

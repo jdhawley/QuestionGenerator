@@ -8,7 +8,7 @@ using QuestionGenerator.Data;
 
 namespace QuestionGenerator.Data.Migrations
 {
-    [DbContext(typeof(LocalDbContext))]
+    [DbContext(typeof(QuestionDbContext))]
     partial class LocalDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
