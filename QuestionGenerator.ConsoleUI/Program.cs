@@ -21,11 +21,17 @@ namespace QuestionGenerator.ConsoleUI
             SeedEmptyDatabase();
             List<Question> randomQuestions = QueryRandomQuestions();
             EmailQuestions(configuration, randomQuestions);
+            UpdateQuestionsInDatabase(randomQuestions);
+        }
 
-            //TODO: Update the questions to show they have been sent.
+        private static void UpdateQuestionsInDatabase(List<Question> randomQuestions)
+        {
+            foreach(Question question in randomQuestions)
+            {
+                question.DateUsedUTC = DateTime.Today;
+            }
 
-            Console.WriteLine("Execution complete. Press enter to close.");
-            Console.ReadLine();
+            _context.SaveChanges();
         }
 
         private static void EmailQuestions(IConfigurationRoot configuration, List<Question> randomQuestions)
