@@ -127,8 +127,7 @@ namespace QuestionGenerator.ConsoleUI
         private static void InitializeDbContext(IConfigurationRoot configuration)
         {
             string connString = configuration.GetConnectionString("QuestionDatabase");
-            //_context = new QuestionDbContext(connString);
-            _context = new QuestionDbContext();
+            _context = new QuestionDbContext(connString);
             _context.Database.Migrate();
         }
 

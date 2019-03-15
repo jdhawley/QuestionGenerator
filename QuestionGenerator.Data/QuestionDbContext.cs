@@ -5,11 +5,11 @@ namespace QuestionGenerator.Data
 {
     public class QuestionDbContext : DbContext
     {
-        //private string ConnectionString;
-        //public QuestionDbContext(string connectionString)
-        //{
-        //    ConnectionString = connectionString;
-        //}
+        private string ConnectionString;
+        public QuestionDbContext(string connectionString)
+        {
+            ConnectionString = connectionString;
+        }
 
         public QuestionDbContext()
         { }
@@ -18,9 +18,7 @@ namespace QuestionGenerator.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlite(ConnectionString);
-            //optionsBuilder.UseSqlite("Data Source=../QuestionGenerator.Data/QuestionDatabase.db");
-            optionsBuilder.UseSqlite("Data Source=QuestionDatabase.db");
+            optionsBuilder.UseSqlite(ConnectionString);
         }
     }
 }
