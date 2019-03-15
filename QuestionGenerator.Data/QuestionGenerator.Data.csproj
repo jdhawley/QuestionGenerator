@@ -12,8 +12,4 @@
     <ProjectReference Include="..\QuestionGenerator.Domain\QuestionGenerator.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ProcessedSeedData\" />
-  </ItemGroup>
-
 </Project>
