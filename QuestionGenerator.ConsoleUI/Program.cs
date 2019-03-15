@@ -119,15 +119,15 @@ namespace QuestionGenerator.ConsoleUI
         {
             if (_context.Questions.Count() == 0)
             {
-                SeedData.SeedQuestions(_context, @"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\ProcessedSeedData\BookOfQuestions.txt");
-                SeedData.SeedQuestions(_context, @"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\ProcessedSeedData\QuestionsForCouples.txt");
+                SeedData.SeedQuestions(_context, @"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\Questions.txt");
             }
         }
 
         private static void InitializeDbContext(IConfigurationRoot configuration)
         {
             string connString = configuration.GetConnectionString("QuestionDatabase");
-            _context = new QuestionDbContext(connString);
+            //_context = new QuestionDbContext(connString);
+            _context = new QuestionDbContext();
         }
 
         private static IConfigurationRoot GetConfiguration()

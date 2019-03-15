@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace QuestionGenerator.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +12,7 @@ namespace QuestionGenerator.Data.Migrations
                 columns: table => new
                 {
                     QuestionID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     PreferredQuestion = table.Column<bool>(nullable: false),
                     DateUsedUTC = table.Column<DateTime>(nullable: true),
                     QuestionText = table.Column<string>(nullable: true)
