@@ -12,14 +12,15 @@ namespace QuestionGenerator.ConsoleUI
 {
     class Program
     {
-        private static QuestionDbContext _context;
+        private const int NUMBER_OF_QUESTIONS_TO_GENERATE = 3;
+        private static IRepository _repository;
 
         static void Main(string[] args)
         {
             IConfigurationRoot configuration = GetConfiguration();
             InitializeDbContext(configuration);
             SeedEmptyDatabase();
-            List<Question> randomQuestions = QueryRandomQuestions();
+            List<Question> randomQuestions = QueryRandomQuestions(NUMBER_OF_QUESTIONS_TO_GENERATE);
             EmailQuestions(configuration, randomQuestions);
             UpdateQuestionsInDatabase(randomQuestions);
         }
@@ -29,9 +30,8 @@ namespace QuestionGenerator.ConsoleUI
             foreach(Question question in randomQuestions)
             {
                 question.DateUsedUTC = DateTime.Today;
+                _repository.UpdateDateUsed(question);
             }
-
-            _context.SaveChanges();
         }
 
         private static void EmailQuestions(IConfigurationRoot configuration, List<Question> randomQuestions)
@@ -105,29 +105,23 @@ namespace QuestionGenerator.ConsoleUI
             client.Authenticator = new HttpBasicAuthenticator("api", mailgunApiKey);
         }
 
-        private static List<Question> QueryRandomQuestions()
+        private static List<Question> QueryRandomQuestions(int numberOfQuestions)
         {
-            return _context.Questions
-                           .Where(q => q.DateUsedUTC == null)
-                           .OrderByDescending(q => q.PreferredQuestion)
-                           .ThenBy(r => Guid.NewGuid())
-                           .Take(3)
-                           .ToList();
+            return _repository.GetRandomQuestions(numberOfQuestions);
         }
 
         private static void SeedEmptyDatabase()
         {
-            if (_context.Questions.Count() == 0)
+            if (_repository.QuestionCount() == 0)
             {
-                SeedData.SeedQuestions(_context, @"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\ProcessedSeedData\BookOfQuestions.txt");
-                SeedData.SeedQuestions(_context, @"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\ProcessedSeedData\QuestionsForCouples.txt");
+                SeedData.SeedQuestions(_repository, @"C:\Users\Jonathan\source\repos\QuestionGenerator\QuestionGenerator.Data\Questions.txt");
             }
         }
 
         private static void InitializeDbContext(IConfigurationRoot configuration)
         {
             string connString = configuration.GetConnectionString("QuestionDatabase");
-            _context = new QuestionDbContext(connString);
+            _repository = new SqliteRepository(new QuestionDbContext(connString));
         }
 
         private static IConfigurationRoot GetConfiguration()

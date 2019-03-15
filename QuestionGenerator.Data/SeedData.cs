@@ -1,18 +1,19 @@
-﻿namespace QuestionGenerator.Data
+﻿using QuestionGenerator.Domain;
+
+namespace QuestionGenerator.Data
 {
     public class SeedData
     {
-        public static void SeedQuestions(QuestionDbContext context, string filepath)
+        public static void SeedQuestions(IRepository repository, string filepath)
         {
             foreach (string question in System.IO.File.ReadAllLines(filepath))
             {
-                context.Questions.Add(new Domain.Question()
+                repository.AddQuestion(new Question()
                 {
                     QuestionText = question,
+                    PreferredQuestion = false
                 });
             }
-
-            context.SaveChanges();
         }
     }
 }
