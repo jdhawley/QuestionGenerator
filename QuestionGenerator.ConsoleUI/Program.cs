@@ -7,6 +7,7 @@ using RestSharp;
 using RestSharp.Authenticators;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuestionGenerator.ConsoleUI
 {
@@ -128,6 +129,7 @@ namespace QuestionGenerator.ConsoleUI
             string connString = configuration.GetConnectionString("QuestionDatabase");
             //_context = new QuestionDbContext(connString);
             _context = new QuestionDbContext();
+            _context.Database.Migrate();
         }
 
         private static IConfigurationRoot GetConfiguration()

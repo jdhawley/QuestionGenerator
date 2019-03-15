@@ -19,7 +19,8 @@ namespace QuestionGenerator.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlite(ConnectionString);
-            optionsBuilder.UseSqlite("Data Source=../QuestionGenerator.Data/QuestionDatabase.db");
+            //optionsBuilder.UseSqlite("Data Source=../QuestionGenerator.Data/QuestionDatabase.db");
+            optionsBuilder.UseSqlite("Data Source=QuestionDatabase.db");
         }
     }
 }
