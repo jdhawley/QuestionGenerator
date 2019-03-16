@@ -121,6 +121,7 @@ namespace QuestionGenerator.ConsoleUI
         {
             string connString = configuration.GetConnectionString("QuestionDatabase");
             _repository = new SqliteRepository(new QuestionDbContext(connString));
+            //TODO: Add the schema migration to the SqliteRepository
         }
 
         private static IConfigurationRoot GetConfiguration()

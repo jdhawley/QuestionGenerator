@@ -11,11 +11,14 @@ namespace QuestionGenerator.Data
             ConnectionString = connectionString;
         }
 
+        public QuestionDbContext()
+        { }
+
         public DbSet<Question> Questions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConnectionString);
+            optionsBuilder.UseSqlite(ConnectionString);
         }
     }
 }
