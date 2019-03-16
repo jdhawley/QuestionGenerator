@@ -1,13 +1,11 @@
-﻿using QuestionGenerator.Data;
+﻿using Microsoft.Extensions.Configuration;
+using QuestionGenerator.Data;
 using QuestionGenerator.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using RestSharp;
 using RestSharp.Authenticators;
-using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using Microsoft.EntityFrameworkCore;
 
 namespace QuestionGenerator.ConsoleUI
 {

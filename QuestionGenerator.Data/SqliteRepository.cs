@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using QuestionGenerator.Domain;
 
 namespace QuestionGenerator.Data
@@ -12,6 +13,7 @@ namespace QuestionGenerator.Data
         public SqliteRepository(QuestionDbContext context)
         {
             _context = context;
+            _context.Database.Migrate();
         }
 
         public void AddQuestion(Question question)
