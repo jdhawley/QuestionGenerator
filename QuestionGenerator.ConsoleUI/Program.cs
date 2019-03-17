@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using QuestionGenerator.Data;
 using QuestionGenerator.Domain;
+using QuestionGenerator.Notifications;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
@@ -13,6 +14,7 @@ namespace QuestionGenerator.ConsoleUI
     {
         private const int NUMBER_OF_QUESTIONS_TO_GENERATE = 3;
         private static IRepository _repository;
+        private static INotifier _notifier;
 
         static void Main(string[] args)
         {

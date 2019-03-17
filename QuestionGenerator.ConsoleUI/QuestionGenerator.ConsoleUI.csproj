@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\QuestionGenerator.Data\QuestionGenerator.Data.csproj" />
     <ProjectReference Include="..\QuestionGenerator.Domain\QuestionGenerator.Domain.csproj" />
+    <ProjectReference Include="..\QuestionGenerator.Notifications\QuestionGenerator.Notifications.csproj" />
   </ItemGroup>
 
   <ItemGroup>
