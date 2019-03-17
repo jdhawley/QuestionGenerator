@@ -10,26 +10,27 @@ namespace QuestionGenerator.Notifications
     {
         public string From { get; set; }
         public List<string> Recipients { get; set; }
-        public string Subject { get; set; }
         public string Domain { get; set; }
         public string ApiKey { get; set; }
 
         public MailgunNotifier(MailgunNotifierConfiguration config)
         {
-            if(config == null || config.ApiKey == null || config.MailgunDomain == null)
+            if(config == null || config.MailgunApiKey == null || config.MailgunDomain == null)
             {
                 throw new ArgumentNullException();
             }
 
             Domain = config.MailgunDomain;
-            ApiKey = config.ApiKey;
+            ApiKey = config.MailgunApiKey;
         }
 
-        public void SendMessage(string message)
+        public void SendMessage(string subject, string message)
         {
-            RestClient client = new RestClient();
-            client.BaseUrl = new Uri("https://api.mailgun.net/v3");
-            client.Authenticator = new HttpBasicAuthenticator("api", ApiKey);
+            RestClient client = new RestClient
+            {
+                BaseUrl = new Uri("https://api.mailgun.net/v3"),
+                Authenticator = new HttpBasicAuthenticator("api", ApiKey)
+            };
 
             RestRequest request = new RestRequest();
             request.AddParameter("domain", Domain, ParameterType.UrlSegment);
@@ -37,7 +38,8 @@ namespace QuestionGenerator.Notifications
             foreach (string emailTo in Recipients)
                 request.AddParameter("to", emailTo);
             request.AddParameter("from", From);
-            request.AddParameter("subject", $"Email Questions for {DateTime.Today.ToString("MM/dd/yyyy")}");
+            //request.AddParameter("subject", $"Email Questions for {DateTime.Today.ToString("MM/dd/yyyy")}");
+            request.AddParameter("subject", subject);
             request.AddParameter("text", message);
             request.Method = Method.POST;
             
@@ -52,11 +54,6 @@ namespace QuestionGenerator.Notifications
         public void SetRecipients(IEnumerable<string> recipients)
         {
             Recipients = recipients.ToList();
-        }
-
-        public void SetSubject(string subject)
-        {
-            Subject = subject;
         }
     }
 }

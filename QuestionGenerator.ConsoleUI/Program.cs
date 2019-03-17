@@ -2,11 +2,10 @@
 using QuestionGenerator.Data;
 using QuestionGenerator.Domain;
 using QuestionGenerator.Notifications;
-using RestSharp;
-using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace QuestionGenerator.ConsoleUI
 {
@@ -37,73 +36,20 @@ namespace QuestionGenerator.ConsoleUI
 
         private static void EmailQuestions(IConfigurationRoot configuration, List<Question> randomQuestions)
         {
-            RestClient client = new RestClient();
-            ConfigureClient(configuration, client);
-
-            RestRequest request = new RestRequest();
-            ConfigureRequest(configuration, request, randomQuestions);
-            
-            client.Execute(request);
-        }
-
-        private static void ConfigureRequest(IConfigurationRoot configuration, RestRequest request, List<Question> randomQuestions)
-        {
-            ConfigureRequestDomain(configuration, request);
-            ConfigureRequestTo(configuration, request);
-            ConfigureRequestFrom(configuration, request);
-            ConfigureRequestSubject(request);
-            ConfigureRequestEmail(request, randomQuestions);
-            ConfigureRequestMethod(request);
-        }
-
-        private static void ConfigureRequestMethod(RestRequest request)
-        {
-            request.Method = Method.POST;
-        }
-
-        private static void ConfigureRequestEmail(RestRequest request, List<Question> randomQuestions)
-        {
-            string questions = "";
-            foreach (Question question in randomQuestions)
+            MailgunNotifierConfiguration mgConfig = new MailgunNotifierConfiguration()
             {
-                questions += question.QuestionText + "\n";
-            }
-            request.AddParameter("text", questions);
-        }
+                MailgunDomain = configuration.GetSection("mailgun-domain").Value,
+                MailgunApiKey = configuration.GetSection("mailgun-apikey").Value
+            };
+            _notifier = new MailgunNotifier(mgConfig);
 
-        private static void ConfigureRequestSubject(RestRequest request)
-        {
-            request.AddParameter("subject", $"Email Questions for {DateTime.Today.ToString("MM/dd/yyyy")}");
-        }
-
-        private static void ConfigureRequestTo(IConfigurationRoot configuration, RestRequest request)
-        {
+            _notifier.SetFrom(configuration.GetSection("mailgun-from").Value);
             List<string> mailgunTo = new List<string>();
             configuration.GetSection("mailgun-to").Bind(mailgunTo);
-            foreach (string emailTo in mailgunTo)
-                request.AddParameter("to", emailTo);
-        }
-
-        private static void ConfigureRequestFrom(IConfigurationRoot configuration, RestRequest request)
-        {
-            string mailgunFrom = configuration.GetSection("mailgun-from").Value;
-            request.AddParameter("from", mailgunFrom);
-        }
-
-        private static void ConfigureRequestDomain(IConfigurationRoot configuration, RestRequest request)
-        {
-            string mailgunDomain = configuration.GetSection("mailgun-domain").Value;
-
-            request.AddParameter("domain", mailgunDomain, ParameterType.UrlSegment);
-            request.Resource = $"{mailgunDomain}/messages";
-        }
-
-        private static void ConfigureClient(IConfigurationRoot configuration, RestClient client)
-        {
-            string mailgunApiKey = configuration.GetSection("mailgun-apikey").Value;
-
-            client.BaseUrl = new Uri("https://api.mailgun.net/v3");
-            client.Authenticator = new HttpBasicAuthenticator("api", mailgunApiKey);
+            _notifier.SetRecipients(mailgunTo);
+            _notifier.SendMessage(
+                $"Email Questions for {DateTime.Today.ToString("MM/dd/yyyy")}", 
+                String.Join("\n\n", randomQuestions.Select(x => x.QuestionText)));
         }
 
         private static List<Question> QueryRandomQuestions(int numberOfQuestions)
@@ -123,7 +69,6 @@ namespace QuestionGenerator.ConsoleUI
         {
             string connString = configuration.GetConnectionString("QuestionDatabase");
             _repository = new SqliteRepository(new QuestionDbContext(connString));
-            //TODO: Add the schema migration to the SqliteRepository
         }
 
         private static IConfigurationRoot GetConfiguration()
