@@ -42,5 +42,10 @@ namespace QuestionGenerator.Data
             _context.Questions.Update(question);
             _context.SaveChanges();
         }
+
+        public List<Question> SearchQuestions(string searchText)
+        {
+            return _context.Questions.Where(x => x.QuestionText.Contains(searchText)).ToList();
+        }
     }
 }

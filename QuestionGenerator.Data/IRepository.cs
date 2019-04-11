@@ -10,5 +10,6 @@ namespace QuestionGenerator.Data
         void AddQuestion(Question question);
         void UpdateDateUsed(Question question);
         int QuestionCount();
+        List<Question> SearchQuestions(string searchText);
     }
 }
