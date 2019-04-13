@@ -10,13 +10,17 @@ namespace QuestionGenerator.ConsoleUI
     {
         private string connectionString;
 
-        public QuestionDbContextFactory(IConfigurationRoot configuration)
-        {
-            connectionString = configuration.GetConnectionString("QuestionDatabase");
-        }
-
         public QuestionDbContext CreateDbContext(string[] args)
         {
+            if(connectionString == null)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                connectionString = configuration.GetConnectionString("QuestionDatabase");
+            }
+
             var optionsBuilder = new DbContextOptionsBuilder<QuestionDbContext>();
             optionsBuilder.UseSqlite(connectionString);
 
