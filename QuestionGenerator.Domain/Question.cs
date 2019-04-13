@@ -11,6 +11,6 @@ namespace QuestionGenerator.Domain
         public DateTime? DateUsedUTC { get; set; }
         public string QuestionText { get; set; }
 
-        //public List<UserQuestion> UserQuestions { get; set; }
+        public List<UserQuestion> UserQuestions { get; set; }
     }
 }

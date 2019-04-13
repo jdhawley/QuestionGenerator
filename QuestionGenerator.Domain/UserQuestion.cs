@@ -6,6 +6,7 @@ namespace QuestionGenerator.Domain
 {
     public class UserQuestion
     {
+        public int UserQuestionID { get; set; }
         public int UserID { get; set; }
         public int QuestionID { get; set; }
         public DateTime DateSent { get; set; }
