@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using QuestionGenerator.Data;
 using QuestionGenerator.Domain;
 using QuestionGenerator.Notifications;
@@ -68,7 +69,8 @@ namespace QuestionGenerator.ConsoleUI
         private static void InitializeDbContext(IConfigurationRoot configuration)
         {
             string connString = configuration.GetConnectionString("QuestionDatabase");
-            _repository = new SqliteRepository(new QuestionDbContext(connString));
+            var options = new DbContextOptionsBuilder<QuestionDbContext>().UseSqlite(connString).Options;
+            _repository = new SqliteRepository(new QuestionDbContext(options));
         }
 
         private static IConfigurationRoot GetConfiguration()
