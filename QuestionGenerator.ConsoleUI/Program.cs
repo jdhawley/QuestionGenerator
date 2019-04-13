@@ -69,8 +69,8 @@ namespace QuestionGenerator.ConsoleUI
         private static void InitializeDbContext(IConfigurationRoot configuration)
         {
             string connString = configuration.GetConnectionString("QuestionDatabase");
-            var options = new DbContextOptionsBuilder<QuestionDbContext>().UseSqlite(connString).Options;
-            _repository = new SqliteRepository(new QuestionDbContext(options));
+            var contextFactory = new QuestionDbContextFactory(configuration);
+            _repository = new SqliteRepository(contextFactory.CreateDbContext(null));
         }
 
         private static IConfigurationRoot GetConfiguration()
